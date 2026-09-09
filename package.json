@@ -1,0 +1,13 @@
+{
+  "name": "vocabtyping",
+  "version": "1.0.0",
+  "description": "Quan Ly Bai Viet - Text Practice & Corpus desktop app",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^32.0.0"
+  }
+}

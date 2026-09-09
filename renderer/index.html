@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self';">
+<title>Quản lý bài viết</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="app-nav">
+    <a id="nav-practice" class="active" data-section="practice">Text Practice</a>
+    <a id="nav-corpus" data-section="corpus">Corpus</a>
+  </nav>
+
+  <!-- ===================== Text Practice section ===================== -->
+  <section id="section-practice">
+
+    <!-- List view -->
+    <div id="view-list">
+      <div class="head-row">
+        <h1>Text Practice</h1>
+        <button type="button" id="btn-open-add" class="btn btn-primary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>New Text Practice</button>
+      </div>
+
+      <div class="toolbar">
+        <div class="filters">
+          <input class="input" id="search-input" type="text" placeholder="Search here...">
+          <select class="input">
+            <option>This month</option>
+            <option>This week</option>
+            <option>Today</option>
+            <option>All time</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th class="col-num"><span class="sort-th">Rating<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></span></th>
+            <th class="col-num">Length</th>
+            <th class="col-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21 12 16.5 5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></th>
+            <th class="col-num">Finished</th>
+            <th class="col-num">Age</th>
+            <th class="col-icon"></th>
+          </tr>
+        </thead>
+        <tbody id="posts-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Detail / practice view -->
+    <div id="view-detail" hidden>
+      <button type="button" id="btn-back" class="btn btn-secondary blueprint" style="margin-bottom: var(--space-4);"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Back to Text Practice</button>
+      <h1 class="detail-title" id="detail-title"></h1>
+      <div class="detail-sub" id="detail-sub"></div>
+
+      <div class="detail-layout">
+        <div class="card blueprint word-card">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker" id="word-kicker">Current word</div>
+          <div class="word-term" id="word-term"></div>
+          <div class="word-row">
+            <label>Meaning</label>
+            <div class="val" id="word-meaning"></div>
+          </div>
+          <div class="word-row">
+            <label>IPA</label>
+            <div class="val" id="word-ipa"></div>
+          </div>
+          <button type="button" id="btn-add-to-corpus" class="btn btn-secondary btn-block blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Add to Corpus</button>
+          <span class="tag tag-outline" id="tag-in-corpus" hidden>In corpus</span>
+        </div>
+
+        <div>
+          <div class="detail-meta">
+            <div>
+              <button type="button" id="btn-auto-read" class="btn btn-ghost btn-icon icon-toggle" aria-label="Toggle auto-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>
+              <button type="button" id="btn-timer-toggle" class="btn btn-ghost btn-icon icon-toggle is-on" aria-label="Toggle timer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></button>
+            </div>
+            <div class="meta-right">
+              <span class="timer" id="timer-label">01:00</span>
+              <button type="button" id="btn-restart" class="btn btn-ghost btn-icon" aria-label="Restart"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+            </div>
+          </div>
+          <div class="practice-text" id="practice-text">
+            <textarea class="typing-input" id="typing-input" autofocus></textarea>
+            <div id="practice-lines"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Corpus section ===================== -->
+  <section id="section-corpus" hidden>
+    <div class="head-row">
+      <h1>Corpus</h1>
+      <button type="button" class="btn btn-primary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>New Entry</button>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th>Word / Phrase</th>
+          <th>Definition (EN-EN)</th>
+          <th>IPA</th>
+          <th>Part of Speech</th>
+          <th>Stop Word</th>
+        </tr>
+      </thead>
+      <tbody id="corpus-tbody"></tbody>
+    </table>
+  </section>
+</div>
+
+<!-- ===================== Add modal ===================== -->
+<div class="dialog-backdrop" id="add-modal-backdrop" hidden>
+  <div class="dialog blueprint add-dialog" role="dialog" aria-modal="true" aria-labelledby="add-dialog-title" id="add-dialog">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div class="dialog-title" id="add-dialog-title">New Text Practice</div>
+    <div class="dialog-body">
+      <div class="field">
+        <label>Title *</label>
+        <input class="input" id="add-title" type="text" placeholder="please choose a descriptive title">
+        <div class="field-hint">examples, requirements (no phone numbers, urls, etc.)</div>
+        <div class="field-hint field-error" id="add-title-error" hidden>Please enter a title.</div>
+      </div>
+
+      <div class="field">
+        <div class="mode-row">
+          <label style="margin-bottom: 0;">Text *</label>
+          <div class="seg" role="radiogroup" aria-label="Text type">
+            <label class="seg-opt"><input type="radio" name="textMode" value="raw" checked>Raw text</label>
+            <label class="seg-opt"><input type="radio" name="textMode" value="markdown">Markdown</label>
+          </div>
+        </div>
+
+        <div class="mode-row" id="md-view-row" hidden>
+          <div class="seg" role="radiogroup" aria-label="Markdown view">
+            <label class="seg-opt"><input type="radio" name="mdView" value="edit" checked>Edit</label>
+            <label class="seg-opt"><input type="radio" name="mdView" value="preview">Preview</label>
+          </div>
+        </div>
+
+        <textarea class="input" id="add-text" placeholder="at least 10 characters"></textarea>
+        <div class="md-preview" id="add-md-preview" hidden></div>
+        <div class="field-hint field-error" id="add-text-error" hidden>Text must be at least 10 characters.</div>
+      </div>
+
+      <div class="field">
+        <label>Text Language</label>
+        <select class="input" id="add-language">
+          <option>English (english)</option>
+          <option>Tiếng Việt (vietnamese)</option>
+          <option>Français (french)</option>
+          <option>Deutsch (german)</option>
+        </select>
+      </div>
+    </div>
+    <div class="dialog-actions" style="position: sticky; bottom: 0; background: var(--color-bg); margin: 0 calc(-1 * var(--space-4)) calc(-1 * var(--space-4)); padding: var(--space-4) var(--space-4); border-top: 1px solid var(--color-neutral-300);">
+      <button type="button" id="btn-add-cancel" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Cancel</button>
+      <button type="button" id="btn-add-publish" class="btn btn-primary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><span id="add-publish-label">Publish</span></button>
+    </div>
+  </div>
+</div>
+
+<script src="renderer.js"></script>
+</body>
+</html>
