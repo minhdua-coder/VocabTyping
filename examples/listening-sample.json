@@ -1,0 +1,20 @@
+{
+  "title": "Daily conversation",
+  "sentences": [
+    {
+      "english": "Could you help me with this?",
+      "ipa": "/kʊd juː help miː wɪð ðɪs/",
+      "vietnamese": "Bạn có thể giúp tôi việc này không?"
+    },
+    {
+      "english": "I would like a cup of coffee.",
+      "ipa": "/aɪ wʊd laɪk ə kʌp əv ˈkɒfi/",
+      "vietnamese": "Tôi muốn một tách cà phê."
+    },
+    {
+      "english": "See you tomorrow.",
+      "ipa": "/siː juː təˈmɒrəʊ/",
+      "vietnamese": "Hẹn gặp bạn ngày mai."
+    }
+  ]
+}

@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self';">
-<title>Quản lý bài viết</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' blob: data: https://fonts.gstatic.com; script-src 'self'; worker-src 'self' blob:; connect-src 'self'; media-src 'self' blob:;">
+<title>VocabTyping</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="wrap">
 
-  <nav class="app-nav">
+  <nav class="app-nav no-print">
+    <div class="app-brand"><img src="assets/icon-64.png" alt="" class="app-logo">VocabTyping</div>
     <a id="nav-practice" class="active" data-section="practice">Text Practice</a>
     <a id="nav-corpus" data-section="corpus">Corpus</a>
+    <a id="nav-reading" data-section="reading">Reading</a>
+    <a id="nav-listening" data-section="listening" href="#">Listening Typing</a>
+    <a id="nav-collections" data-section="collections">Collections</a>
+    <button type="button" id="btn-open-llm-config" class="btn btn-ghost btn-icon nav-config-btn" aria-label="Config LLM"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
   </nav>
 
   <!-- ===================== Text Practice section ===================== -->
@@ -115,6 +121,134 @@
       <tbody id="corpus-tbody"></tbody>
     </table>
   </section>
+
+  <!-- ===================== Reading Practice section ===================== -->
+  <section id="section-reading" hidden>
+
+    <div id="reading-view-list">
+      <div class="head-row">
+        <h1>Reading Practice</h1>
+        <div style="display:flex; gap: var(--space-2);">
+          <button type="button" id="btn-upload-reading" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Upload .md / .pdf</button>
+          <button type="button" id="btn-new-reading" class="btn btn-primary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>New Reading</button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="filters">
+          <select class="input" id="reading-topic-filter"><option value="">All topics</option></select>
+        </div>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th class="col-num">Topic</th>
+            <th class="col-num">Source</th>
+            <th class="col-num">Highlights</th>
+            <th class="col-num">Age</th>
+            <th class="col-icon"></th>
+          </tr>
+        </thead>
+        <tbody id="reading-tbody"></tbody>
+      </table>
+    </div>
+
+    <div id="reading-view-detail" hidden>
+      <div class="reading-detail-header">
+        <button type="button" id="btn-reading-back" class="btn btn-secondary blueprint no-print" style="margin-bottom: var(--space-4);"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Back to Reading</button>
+        <div class="head-row">
+          <div>
+            <h1 class="detail-title" id="reading-detail-title"></h1>
+            <div class="detail-sub" id="reading-detail-sub"></div>
+          </div>
+          <div class="no-print" style="display:flex; gap: var(--space-2);">
+            <button type="button" id="btn-read-aloud" class="btn btn-secondary blueprint" aria-label="Read aloud" title="Read the entire reading aloud"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M18.36 5.64a9 9 0 0 1 0 12.72"/></svg></button>
+            <button type="button" id="btn-toggle-search" class="btn btn-secondary blueprint" aria-label="Search in reading" title="Search in reading"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
+            <button type="button" id="btn-download-md" class="btn btn-secondary blueprint" aria-label="Download Markdown" title="Download Markdown (.md)"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg> MD</button>
+            <button type="button" id="btn-download-pdf" class="btn btn-secondary blueprint" aria-label="Download PDF" title="Download PDF"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg> PDF</button>
+            <button type="button" id="btn-edit-reading" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Edit</button>
+          </div>
+        </div>
+        <div class="reading-search-bar no-print" id="reading-search-bar" hidden>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" class="input" id="reading-search-input" placeholder="Search in reading...">
+          <span class="reading-search-count" id="reading-search-count">0/0</span>
+          <button type="button" class="btn btn-ghost btn-icon" id="btn-search-prev" aria-label="Previous match" title="Previous (Shift+Enter)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></button>
+          <button type="button" class="btn btn-ghost btn-icon" id="btn-search-next" aria-label="Next match" title="Next (Enter)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+          <button type="button" class="btn btn-ghost btn-icon" id="btn-search-close" aria-label="Close search" title="Close (Esc)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+        </div>
+        <div class="reading-search-bar no-print" id="read-aloud-bar" hidden>
+          <button type="button" class="btn btn-ghost btn-icon" id="btn-read-aloud-pause" aria-label="Pause/Resume" title="Pause"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></button>
+          <span class="field-hint" style="margin:0;">Reading aloud…</span>
+          <span class="speech-rate-row" style="flex:1; margin:0;">
+            <span>Speed</span>
+            <input type="range" id="read-aloud-rate" min="0.5" max="1.5" step="0.1" value="1">
+            <span class="rate-value" id="read-aloud-rate-value">1.0x</span>
+          </span>
+          <button type="button" class="btn btn-ghost btn-icon" id="btn-read-aloud-stop" aria-label="Stop" title="Stop"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="1"/></svg></button>
+        </div>
+      </div>
+      <div class="reading-detail-layout">
+        <div class="md-preview reading-preview" id="reading-preview"></div>
+        <div class="card blueprint highlights-card no-print">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">Highlights</div>
+          <div id="reading-highlights-list"></div>
+          <div class="card-kicker vocab-kicker-row" style="margin-top: var(--space-4);">
+            <span>Vocabulary</span>
+            <button type="button" class="btn btn-ghost btn-icon" id="btn-reading-vocab-export-pdf" aria-label="Export PDF" title="Export this reading's vocabulary as PDF"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></button>
+          </div>
+          <div id="reading-vocab-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Collections section ===================== -->
+  <section id="section-listening" hidden aria-label="Listening Typing"></section>
+  <section id="section-collections" hidden>
+
+    <div id="collections-view-list">
+      <div class="head-row">
+        <h1>Collections</h1>
+        <button type="button" id="btn-new-collection" class="btn btn-primary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>New Collection</button>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th class="col-num">Words</th>
+            <th class="col-num">Age</th>
+            <th class="col-icon"></th>
+          </tr>
+        </thead>
+        <tbody id="collections-tbody"></tbody>
+      </table>
+    </div>
+
+    <div id="collections-view-detail" hidden>
+      <button type="button" id="btn-collection-back" class="btn btn-secondary blueprint" style="margin-bottom: var(--space-4);"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Back to Collections</button>
+      <div class="head-row">
+        <h1 class="detail-title" id="collection-detail-title"></h1>
+        <button type="button" id="btn-collection-export-pdf" class="btn btn-secondary blueprint" aria-label="Export PDF" title="Export vocabulary as PDF"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg> Export PDF</button>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Term</th>
+            <th>Meaning</th>
+            <th>IPA</th>
+            <th>Part of speech</th>
+            <th>Source</th>
+            <th class="col-icon"></th>
+          </tr>
+        </thead>
+        <tbody id="collection-words-tbody"></tbody>
+      </table>
+    </div>
+  </section>
 </div>
 
 <!-- ===================== Add modal ===================== -->
@@ -155,9 +289,9 @@
         <label>Text Language</label>
         <select class="input" id="add-language">
           <option>English (english)</option>
-          <option>Tiếng Việt (vietnamese)</option>
-          <option>Français (french)</option>
-          <option>Deutsch (german)</option>
+          <option value="Tiếng Việt (vietnamese)">Vietnamese (vietnamese)</option>
+          <option value="Français (french)">French (french)</option>
+          <option value="Deutsch (german)">German (german)</option>
         </select>
       </div>
     </div>
@@ -168,6 +302,276 @@
   </div>
 </div>
 
+<!-- ===================== New/Edit Reading modal ===================== -->
+<div class="dialog-backdrop" id="reading-modal-backdrop" hidden>
+  <div class="dialog blueprint add-dialog" role="dialog" aria-modal="true" aria-labelledby="reading-dialog-title" id="reading-dialog">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div class="dialog-title" id="reading-dialog-title">New Reading</div>
+    <div class="dialog-body">
+      <div class="field">
+        <label>Title *</label>
+        <input class="input" id="reading-title-input" type="text" placeholder="Reading title">
+        <div class="field-hint field-error" id="reading-title-error" hidden>Please enter a title.</div>
+      </div>
+
+      <div class="field">
+        <label>Topic</label>
+        <select class="input" id="reading-topic-select"><option value="">— No topic —</option></select>
+        <div class="field" id="reading-new-topic-field" hidden style="margin-top: var(--space-2); margin-bottom: 0;">
+          <input class="input" id="reading-new-topic-name" type="text" placeholder="e.g. IELTS Reading">
+          <div class="field-hint field-error" id="reading-new-topic-error" hidden>Please enter a topic name.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="mode-row">
+          <label style="margin-bottom: 0;">Markdown *</label>
+          <div class="seg" role="radiogroup" aria-label="Markdown view">
+            <label class="seg-opt"><input type="radio" name="readingMdView" value="edit" checked>Edit</label>
+            <label class="seg-opt"><input type="radio" name="readingMdView" value="preview">Preview</label>
+          </div>
+        </div>
+        <textarea class="input" id="reading-text-input" placeholder="at least 10 characters"></textarea>
+        <div class="md-preview" id="reading-md-preview" hidden></div>
+        <div class="field-hint field-error" id="reading-text-error" hidden>Text must be at least 10 characters.</div>
+      </div>
+      <div class="field-hint" id="reading-pdf-info" hidden></div>
+    </div>
+    <div class="dialog-actions" style="position: sticky; bottom: 0; background: var(--color-bg); margin: 0 calc(-1 * var(--space-4)) calc(-1 * var(--space-4)); padding: var(--space-4) var(--space-4); border-top: 1px solid var(--color-neutral-300);">
+      <button type="button" id="btn-reading-cancel" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Cancel</button>
+      <button type="button" id="btn-reading-save" class="btn btn-primary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><span id="reading-save-label">Save</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== LLM Config modal ===================== -->
+<div class="dialog-backdrop" id="llm-config-backdrop" hidden>
+  <div class="dialog blueprint settings-dialog" role="dialog" aria-modal="true" aria-labelledby="llm-config-title" id="llm-config-dialog">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div class="dialog-title" id="llm-config-title">Settings</div>
+    <div class="settings-layout">
+      <nav class="settings-nav" id="settings-nav">
+        <button type="button" class="settings-nav-item active" data-pane="highlight">Highlight</button>
+        <button type="button" class="settings-nav-item" data-pane="voice">Voice</button>
+        <button type="button" class="settings-nav-item" data-pane="dictionary">Dictionary</button>
+        <button type="button" class="settings-nav-item" data-pane="translate">Translation (LLM)</button>
+        <button type="button" class="settings-nav-item" data-pane="pronunciation">Pronunciation</button>
+      </nav>
+      <div class="settings-panes">
+
+        <div class="settings-pane" data-pane="highlight">
+          <div class="field">
+            <label class="checkbox-row"><input type="checkbox" id="auto-highlight-checkbox"> Automatically highlight words added to vocabulary</label>
+          </div>
+          <div class="field">
+            <label>Default highlight color</label>
+            <div class="color-swatch-row" id="default-color-row">
+              <button type="button" class="default-color-swatch" data-color="#fff3a3" style="background:#fff3a3" title="Yellow"></button>
+              <button type="button" class="default-color-swatch" data-color="#b9f6b0" style="background:#b9f6b0" title="Green"></button>
+              <button type="button" class="default-color-swatch" data-color="#a8d8ff" style="background:#a8d8ff" title="Blue"></button>
+              <button type="button" class="default-color-swatch" data-color="#ffc2d1" style="background:#ffc2d1" title="Pink"></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-pane" data-pane="voice" hidden>
+          <div class="field">
+            <label>Speech rate: <span id="settings-rate-value">1.0x</span></label>
+            <input type="range" id="settings-speech-rate" min="0.5" max="1.5" step="0.1" value="1">
+            <div class="field-hint">Applies to every speaker button in the app (Piper or system voice).</div>
+          </div>
+          <div class="settings-section-title">Piper TTS (offline voice)</div>
+          <div class="field">
+            <label class="checkbox-row"><input type="checkbox" id="piper-enabled-checkbox"> Use Piper TTS instead of the default system voice</label>
+          </div>
+          <div class="field">
+            <label>Piper executable path</label>
+            <div class="path-row">
+              <input class="input" id="piper-path-input" type="text" placeholder="C:\piper\piper.exe">
+              <button type="button" class="btn btn-secondary" id="btn-browse-piper-exe">Browse…</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Voice model path (.onnx)</label>
+            <div class="path-row">
+              <input class="input" id="piper-model-input" type="text" placeholder="C:\piper\voices\en_US-lessac-medium.onnx">
+              <button type="button" class="btn btn-secondary" id="btn-browse-piper-model">Browse…</button>
+            </div>
+          </div>
+          <div class="field-row-actions">
+            <button type="button" id="btn-piper-test" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Test Piper</button>
+          </div>
+          <div class="field-hint" id="piper-test-status"></div>
+        </div>
+
+        <div class="settings-pane" data-pane="dictionary" hidden>
+          <div class="field-hint" style="margin-bottom: var(--space-3);">Use <b>Lookup</b> on selected Reading text to find words and phrases in your local dictionary, without an internet connection. Use Translate for online translation with Google or an LLM.</div>
+          <div class="field">
+            <label>English–Vietnamese dictionary file (.json or .txt/.tsv)</label>
+            <div class="path-row">
+              <input class="input" id="dictionary-path-input" type="text" placeholder="C:\dict\en-vi.json">
+              <button type="button" class="btn btn-secondary" id="btn-browse-dictionary">Browse…</button>
+            </div>
+            <div class="field-hint">Three formats are detected automatically: JSON <code>{"word": "meaning", ...}</code>, one <code>word[TAB]meaning</code> per line, or StarDict text <code>@word /IPA/</code>. You can choose <code>data/english-vietnamese.txt</code> from <a href="https://github.com/manhminno/English-Vietnamese-Dictionary" target="_blank" rel="noopener">English-Vietnamese-Dictionary</a> directly, without converting it.</div>
+          </div>
+
+          <div class="settings-section-title">Your custom dictionary</div>
+          <div class="field">
+            <label>Custom dictionary file</label>
+            <div class="path-row">
+              <input class="input" id="custom-dictionary-path-input" type="text" placeholder="C:\dict\my-dictionary.json" readonly>
+              <button type="button" class="btn btn-secondary" id="btn-choose-custom-dictionary">Choose / Create…</button>
+            </div>
+            <div class="field-hint">This is separate from the main dictionary. In Translate, choose <b>Add to my dictionary</b> to save a word for future offline lookups. Replacing the main dictionary does not affect your custom entries.</div>
+          </div>
+        </div>
+
+        <div class="settings-pane" data-pane="translate" hidden>
+          <div class="field">
+            <label>Translation provider (used by Translate for words, sentences, and passages)</label>
+            <label class="radio-row"><input type="radio" name="translateProvider" value="google" checked> Google Translate (online, free)</label>
+            <label class="radio-row"><input type="radio" name="translateProvider" value="llm"> LLM (contextual meanings, IPA, and examples; API charges may apply)</label>
+          </div>
+          <div class="settings-section-title">LLM Configuration</div>
+          <div class="field">
+            <label>Base URL</label>
+            <input class="input" id="llm-base-url" type="text" placeholder="https://api.openai.com/v1">
+            <div class="field-hint">OpenAI-compatible endpoint (OpenAI, DeepSeek, Groq, Ollama, OpenRouter, ...). Configure this to use the LLM translation provider or detailed LLM translations.</div>
+          </div>
+          <div class="field">
+            <label>API Key</label>
+            <input class="input" id="llm-api-key" type="password" placeholder="sk-...">
+          </div>
+          <div class="field">
+            <label>Model</label>
+            <input class="input" id="llm-model" type="text" placeholder="gpt-4o-mini">
+          </div>
+          <div class="field-row-actions">
+            <button type="button" id="btn-llm-test" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Test connection</button>
+          </div>
+          <div class="field-hint" id="llm-test-status"></div>
+        </div>
+
+        <div class="settings-pane" data-pane="pronunciation" hidden>
+          <div class="field-hint" style="margin-bottom: var(--space-3);">Record and score pronunciation against dictionary IPA using the microphone button in Reading or Collections. Recognition runs offline after a one-time model download (~317 MB).</div>
+          <div class="field">
+            <label>Custom model directory (optional)</label>
+            <div class="path-row">
+              <input class="input" id="pronunciation-model-dir-input" type="text" placeholder="Leave empty to download the default model" readonly>
+              <button type="button" class="btn btn-secondary" id="btn-browse-pronunciation-model">Browse…</button>
+            </div>
+            <div class="field-hint">Optional: choose a directory containing <code>config.json</code>, <code>tokenizer.json</code>, and <code>onnx/model_quantized.onnx</code>. The default model is a community ONNX conversion of <code>vitouphy/wav2vec2-xls-r-300m-timit-phoneme</code>. A custom directory can be used if the default download is unavailable.</div>
+          </div>
+          <div class="field-row-actions">
+            <button type="button" id="btn-pronunciation-download" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Download Model</button>
+          </div>
+          <div class="field-hint" id="pronunciation-download-status"></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <button type="button" id="btn-llm-config-cancel" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Cancel</button>
+      <button type="button" id="btn-llm-config-save" class="btn btn-primary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Lookup result modal (local dictionary) ===================== -->
+<div class="dialog-backdrop" id="lookup-backdrop" hidden>
+  <div class="dialog blueprint lookup-dialog" role="dialog" aria-modal="true" aria-labelledby="lookup-title" id="lookup-dialog">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div class="dialog-title" id="lookup-title">Lookup</div>
+    <div class="dialog-body" id="lookup-body"></div>
+    <div class="dialog-actions">
+      <button type="button" id="btn-lookup-close" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Close</button>
+      <button type="button" id="btn-lookup-add" class="btn btn-primary blueprint" hidden><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Add to vocabulary</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Translate result modal ===================== -->
+<div class="dialog-backdrop" id="translate-backdrop" hidden>
+  <div class="dialog blueprint" role="dialog" aria-modal="true" aria-labelledby="translate-title" id="translate-dialog">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div class="dialog-title" id="translate-title">Translate</div>
+    <div class="dialog-body" id="translate-body"></div>
+    <div class="dialog-actions">
+      <button type="button" id="btn-translate-close" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Close</button>
+      <button type="button" id="btn-add-custom-dict" class="btn btn-secondary blueprint" hidden><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Add to my dictionary</button>
+      <button type="button" id="btn-translate-add" class="btn btn-primary blueprint" hidden><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Add to vocabulary</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Add-to-collection modal ===================== -->
+<div class="dialog-backdrop" id="add-to-collection-backdrop" hidden>
+  <div class="dialog blueprint" role="dialog" aria-modal="true" aria-labelledby="add-to-collection-title" id="add-to-collection-dialog">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div class="dialog-title" id="add-to-collection-title">Add to Vocabulary</div>
+    <div class="dialog-body">
+      <div class="field">
+        <label>Collection</label>
+        <select class="input" id="collection-select"></select>
+      </div>
+      <div class="field" id="new-collection-field" hidden>
+        <label>New collection name *</label>
+        <input class="input" id="new-collection-name" type="text" placeholder="e.g. IELTS Vocabulary">
+        <div class="field-hint field-error" id="new-collection-error" hidden>Please enter a collection name.</div>
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <button type="button" id="btn-add-to-collection-cancel" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Cancel</button>
+      <button type="button" id="btn-add-to-collection-confirm" class="btn btn-primary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Print-only container for vocabulary PDF export (see styles.css @media print,
+     and exportVocabularyPdf() in renderer.js). Invisible in normal use;
+     shown in place of everything else only while printToPDF() is running. -->
+<div id="vocab-pdf-export"></div>
+
+<!-- ===================== Floating selection menu (highlight / translate) ===================== -->
+<div class="selection-menu" id="selection-menu" hidden>
+  <button type="button" class="sel-swatch" data-color="#fff3a3" style="background:#fff3a3" title="Yellow"></button>
+  <button type="button" class="sel-swatch" data-color="#b9f6b0" style="background:#b9f6b0" title="Green"></button>
+  <button type="button" class="sel-swatch" data-color="#a8d8ff" style="background:#a8d8ff" title="Blue"></button>
+  <button type="button" class="sel-swatch" data-color="#ffc2d1" style="background:#ffc2d1" title="Pink"></button>
+  <span class="sel-menu-divider"></span>
+  <button type="button" class="btn btn-ghost btn-icon" id="btn-sel-speak" aria-label="Pronunciation" title="Pronunciation"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M18.36 5.64a9 9 0 0 1 0 12.72"/></svg></button>
+  <button type="button" class="btn btn-ghost sel-translate-btn" id="btn-sel-lookup">Lookup</button>
+  <button type="button" class="btn btn-ghost sel-translate-btn" id="btn-sel-translate">Translate</button>
+  <button type="button" class="btn btn-ghost btn-icon" id="btn-sel-pronounce" aria-label="Pronunciation Practice" aria-keyshortcuts="Alt+R" title="Record selected text (Alt+R)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
+  <button type="button" class="btn btn-ghost btn-icon" id="btn-sel-remove" aria-label="Remove highlight" title="Remove highlight" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+</div>
+
+<!-- ===================== Vocabulary item info modal ===================== -->
+<div class="dialog-backdrop" id="vocab-item-backdrop" hidden>
+  <div class="dialog blueprint lookup-dialog" role="dialog" aria-modal="true" aria-labelledby="vocab-item-title" id="vocab-item-dialog">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div class="dialog-title" id="vocab-item-title">Vocabulary</div>
+    <div class="dialog-body" id="vocab-item-body"></div>
+    <div class="dialog-actions">
+      <button type="button" id="btn-vocab-item-close" title="Close vocabulary details" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Pronunciation practice modal ===================== -->
+<div class="dialog-backdrop" id="pronunciation-backdrop" hidden>
+  <div class="dialog blueprint pronunciation-dialog" role="dialog" aria-modal="true" aria-labelledby="pronunciation-title" id="pronunciation-dialog">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div class="dialog-title" id="pronunciation-title">Pronunciation Practice</div>
+    <div class="dialog-body" id="pronunciation-body"></div>
+    <div class="dialog-actions">
+      <button type="button" id="btn-pronunciation-close" class="btn btn-secondary blueprint"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="pdf-reading.js"></script>
 <script src="renderer.js"></script>
+<script src="listening.js"></script>
 </body>
 </html>

@@ -3,11 +3,50 @@
   "version": "1.0.0",
   "description": "Quan Ly Bai Viet - Text Practice & Corpus desktop app",
   "main": "main.js",
+  "author": "VocabTyping",
   "private": true,
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "electron-builder --win"
   },
   "devDependencies": {
-    "electron": "^32.0.0"
+    "electron": "^32.0.0",
+    "electron-builder": "^26.15.3"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^4.2.0",
+    "pdfjs-dist": "^5.4.624"
+  },
+  "build": {
+    "appId": "com.vocabtyping.app",
+    "productName": "VocabTyping",
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/onnxruntime-node/**/*",
+      "node_modules/sharp/**/*",
+      "node_modules/@img/**/*"
+    ],
+    "files": [
+      "**/*",
+      "!node_modules/onnxruntime-node/bin/napi-v6/darwin",
+      "!node_modules/onnxruntime-node/bin/napi-v6/linux",
+      "!node_modules/onnxruntime-node/bin/napi-v6/win32/arm64",
+      "!**/*.map"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "artifactName": "VocabTyping-Setup-${version}.exe",
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    }
   }
 }
